@@ -1,73 +1,125 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Edge GraphQL API with NestJS, PostgreSQL, and RabbitMQ
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is a backend developer exercise for Amboss Technologies. It demonstrates building a GraphQL API using NestJS that performs CRUD operations on a PostgreSQL database and interacts with RabbitMQ for event handling.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **GraphQL API**:
+    - **Query**: `getEdges`
+        - Retrieves an array of all edges stored in the database.
+    - **Query**: `getEdge`
+        - Retrieves a single edge based on the provided `id`.
+    - **Mutation**: `createEdge`
+        - Creates a new edge with the specified `node1_alias` and `node2_alias`. The created edge is then sent to a RabbitMQ queue.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **RabbitMQ Handler**:
+    - Listens to events from the RabbitMQ queue.
+    - Logs a message indicating a new channel has been created.
+    - Updates the aliases of the edge in the database.
 
-## Installation
+## Getting Started
 
-```bash
-$ npm install
-```
+These instructions will help you set up and run the project on your local machine.
 
-## Running the app
+### Prerequisites
 
-```bash
-# development
-$ npm run start
+- [Docker](https://www.docker.com/get-started)
+- [Node.js](https://nodejs.org/) (version 14 or later)
 
-# watch mode
-$ npm run start:dev
+### Installation
 
-# production mode
-$ npm run start:prod
-```
+1. **Clone the repository**:
 
-## Test
+    ```sh
+    git clone https://github.com/olucvolkan/edge.git
+    cd edge
+    ```
 
-```bash
-# unit tests
-$ npm run test
+2. **Install dependencies**:
 
-# e2e tests
-$ npm run test:e2e
+    ```sh
+    npm install
+    ```
 
-# test coverage
-$ npm run test:cov
-```
+3. **Start Docker containers**:
 
-## Support
+    ```sh
+    docker-compose up -d
+    ```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+   This will start the PostgreSQL and RabbitMQ containers.
 
-## Stay in touch
+4. **Run the NestJS application**:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+    ```sh
+    npm run start:dev
+    ```
 
-## License
+### Configuration
 
-Nest is [MIT licensed](LICENSE).
+Ensure the following environment variables are set in the `docker-compose.yml` and `app.module.ts`:
+
+- **PostgreSQL**:
+    - `POSTGRES_USER: postgres`
+    - `POSTGRES_PASSWORD: postgres`
+    - `POSTGRES_DB: edgesdb`
+
+- **RabbitMQ**:
+    - `urls: ['amqp://rabbitmq:5672']`
+
+### GraphQL API Endpoints
+
+- **Query: getEdges**
+
+    ```graphql
+    query {
+      getEdges {
+        id
+        created_at
+        updated_at
+        capacity
+        node1_alias
+        node2_alias
+        edge_peers
+      }
+    }
+    ```
+
+- **Query: getEdge**
+
+    ```graphql
+    query {
+      getEdge(id: "<EDGE_ID>") {
+        id
+        created_at
+        updated_at
+        capacity
+        node1_alias
+        node2_alias
+        edge_peers
+      }
+    }
+    ```
+
+- **Mutation: createEdge**
+
+    ```graphql
+    mutation {
+      createEdge(node1_alias: "<NODE1_ALIAS>", node2_alias: "<NODE2_ALIAS>") {
+        id
+        created_at
+        updated_at
+        capacity
+        node1_alias
+        node2_alias
+        edge_peers
+      }
+    }
+    ```
+
+### RabbitMQ Handler
+
+The RabbitMQ handler processes events sent to the queue and logs a message:
+
+```sh
+New channel between [node1_alias] and [node2_alias] with a capacity of [capacity] has been created.
