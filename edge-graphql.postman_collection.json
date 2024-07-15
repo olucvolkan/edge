@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "dcc9144d-c847-4795-92af-06cfaf675cc8",
+		"name": "edge-graphql",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3622871"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/graphql",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": \"mutation { createEdge(node1_alias: \\\"Node1\\\", node2_alias: \\\"Node2\\\") { id created_at updated_at capacity node1_alias node2_alias edge_peers } }\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/graphql Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": \"mutation { createEdge(node1_alias: \\\"Node1\\\", node2_alias: \\\"Node2\\\") { id created_at updated_at capacity node1_alias node2_alias edge_peers } }\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

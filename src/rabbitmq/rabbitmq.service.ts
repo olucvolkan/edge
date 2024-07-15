@@ -1,6 +1,6 @@
 import * as amqp from 'amqplib';
 import {Injectable, OnModuleInit} from "@nestjs/common";
-import {Edge} from "../edge/entities/edge.entity";
+import {Edge} from "../edge/graphql/entities/edge.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {EdgeService} from "../edge/edge.service";

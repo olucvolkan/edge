@@ -1,25 +1,34 @@
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
+@ObjectType()
 @Entity()
 export class Edge {
+    @Field(() => ID)
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ type: 'integer' })
-    capacity: number;
-
-    @Column({ type: 'varchar' })
-    node1_alias: string;
-
-    @Column({ type: 'varchar' })
-    node2_alias: string;
-
-    @CreateDateColumn({ type: 'timestamp' })
+    @Field()
+    @CreateDateColumn()
     created_at: Date;
 
-    @UpdateDateColumn({ type: 'timestamp' })
+    @Field()
+    @UpdateDateColumn()
     updated_at: Date;
 
+    @Field()
+    @Column()
+    capacity: number;
+
+    @Field()
+    @Column()
+    node1_alias: string;
+
+    @Field()
+    @Column()
+    node2_alias: string;
+
+    @Field()
     get edge_peers(): string {
         return `${this.node1_alias}-${this.node2_alias}`;
     }

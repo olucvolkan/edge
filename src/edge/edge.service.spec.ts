@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EdgeService } from './edge.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Edge } from './entities/edge.entity';
+import { Edge } from './graphql/entities/edge.entity';
 import { Repository } from 'typeorm';
 import { CreateEdgeInput } from './dto/create-edge.input';
 import * as amqp from 'amqplib';

@@ -3,7 +3,7 @@ services:
     image: postgres:16.3
     container_name: postgres-db
     environment:
-      POSTGRES_USER: postgres
+      POSTGRES_USER: volkanoluc
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: edgesdb
     ports:

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Edge } from './entities/edge.entity';
+import { Edge } from './graphql/entities/edge.entity';
 import { CreateEdgeInput } from './dto/create-edge.input';
 import * as amqp from 'amqplib';
 
