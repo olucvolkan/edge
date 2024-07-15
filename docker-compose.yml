@@ -1,16 +1,15 @@
 services:
   postgres:
-    image: postgres:latest
-    restart: always
+    image: postgres:16.3
     container_name: postgres-db
-    env_file:
-      - docker.env
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: edgesdb
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
-    networks:
-      - postgres
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -18,7 +17,3 @@ services:
       - "15672:15672"
 volumes:
   pgdata:
-
-networks:
-  postgres:
-    driver: bridge

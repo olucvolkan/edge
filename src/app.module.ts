@@ -17,6 +17,8 @@ import { RabbitMQModule } from './rabbitmq/rabbitmq.module';
       database: process.env.DB_DATABASE || 'edgesdb',
       autoLoadEntities: true,
       synchronize: true,
+      retryAttempts: 5,
+      retryDelay: 3000,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
